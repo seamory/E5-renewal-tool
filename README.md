@@ -8,4 +8,4 @@ you can also use the following tool to renew your subscription. but please pay a
   - [oneindex](https://github.com/donwa/oneindex)
   - [rclone](https://rclone.org/)
   
-*if you chose the rclone as your default tool, you should use your own client id and client secret.*
+*if you choose the rclone as your default tool, you should use your own client id and client secret.*
