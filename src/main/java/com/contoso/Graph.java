@@ -30,7 +30,7 @@ public class Graph {
 
             // Create default logger to only log errors
             DefaultLogger logger = new DefaultLogger();
-            logger.setLoggingLevel(LoggerLevel.ERROR);
+            //logger.setLoggingLevel(LoggerLevel.DEBUG);
 
             // Build a Graph client
             graphClient = GraphServiceClient.builder()

@@ -5,6 +5,7 @@ import com.microsoft.graph.models.extensions.Event;
 import com.microsoft.graph.models.extensions.User;
 
 import java.io.*;
+import java.net.PasswordAuthentication;
 import java.util.InputMismatchException;
 import java.util.Properties;
 import java.util.Scanner;
@@ -18,45 +19,30 @@ public class App {
     public static void main(String[] args) {
         System.out.println("Java Graph Tutorial");
         System.out.println();
-        System.out.println("    NOTE: Please make sure your application program is available. "
-                + "the detail you can realize on https://docs.microsoft.com/zh-CN/graph/tutorials/java?tutorial-step=2.");
-        System.out.println();
-        System.out.println("    NOTE: Your should to create a 'oAuth.properties' file first and keep the same path as the program.");
-        System.out.println("        the 'oAuth.properties' file content:");
-        System.out.println("            app.id=Client_ID (You can get it in your application on https://apps.dev.microsoft.com/)\r\n" +
-                "            app.scopes=User.Read,Calendars.Read");
-        System.out.println();
 
         // Load OAuth settings
-        final Properties oAuthProperties = new Properties();
-        try {
-            // File directory = new File("..");
-            // final String filePath = directory.getAbsolutePath();
-            final String filePath = System.getProperty("user.dir");
-            System.out.println(filePath);
-            // oAuthProperties.load(App.class.getResourceAsStream(filePath+ "\\oAuth.properties"));
-            oAuthProperties.load(new InputStreamReader(new BufferedInputStream(new FileInputStream(filePath+ "\\oAuth.properties"))));
-        } catch (IOException e) {
-            System.out.println("Unable to read OAuth configuration. Make sure you have a properly formatted oAuth.properties file. See README for details.");
-            return;
-        }
+        OAuthProperties oAuthProperties = new OAuthProperties();
+        final String accessToken = oAuthProperties.getAppAccessToken();
 
-        final String appId = oAuthProperties.getProperty("app.id");
-        final String[] appScopes = oAuthProperties.getProperty("app.scopes").split(",");
-
-        // Get an access token
-        Authentication.initialize(appId);
-        final String accessToken = Authentication.getUserAccessToken(appScopes);
+        // Clean up the console.
+        /* this function is in writing. */
 
         // Greet the user
-        User user = Graph.getUser(accessToken);
-        System.out.println("Welcome " + user.displayName);
-        System.out.println();
+        try {
+            User user = Graph.getUser(accessToken);
+            System.out.println();
+            System.out.println("Welcome " + user.displayName);
+            System.out.println();
+        } catch (Exception e) {
+            oAuthProperties.deleteAcessToken();
+            return;
+        }
 
         Scanner input = new Scanner(System.in);
 
         int choice = -1;
 
+        // Main menu.
         while (choice != 0) {
             System.out.println("Please choose one of the following options:");
             System.out.println("0. Exit");
